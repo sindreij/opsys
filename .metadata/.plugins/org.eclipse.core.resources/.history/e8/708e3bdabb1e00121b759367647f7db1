@@ -1,0 +1,46 @@
+public class Cpu {
+    private Queue cpuQueue;
+    private Statistics statistics;
+    private Gui gui;
+    private Process currentProcess;
+    private long timeOfLastEvent = 0;
+
+    public Cpu(Queue cpuQueue, Gui gui, Statistics statistics) {
+        this.gui = gui;
+        this.cpuQueue = cpuQueue;
+        this.statistics = statistics;
+    }
+
+    public void insertProcess(Process p) {
+        cpuQueue.insert(p);
+    }
+    
+    public Process startProcess(long clock) {
+    	statistics.idleCpuTime += clock - timeOfLastEvent;
+    	timeOfLastEvent = clock;
+    	assert currentProcess == null;
+    	if (!cpuQueue.isEmpty()) {
+    		currentProcess = (Process)cpuQueue.removeNext();
+    		currentProcess.startCpu(clock);
+    	} else {
+    		currentProcess = null;
+    	}
+    	gui.setCpuActive(currentProcess);
+    	return currentProcess;
+    }
+    
+    public Process stopProcess(long clock) {
+    	long elapsed = clock - timeOfLastEvent
+    	if (currentProcess != null) {
+    		statistics.busyCpuTime += elapsed;
+    		currentProcess.endCpu(clock);
+    	} else {
+    		statistics.idleCpuTime += elapsed;
+    	}
+    	timeOfLastEvent = clock;
+    	Process finished = currentProcess;
+    	currentProcess = null;
+    	gui.setCpuActive(null);
+    	return finished;
+    }
+}

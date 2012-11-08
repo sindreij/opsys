@@ -1,0 +1,12 @@
+public class IO {
+	private Queue ioQueue;
+	private Statistics statistics;
+	private Gui gui;
+	private Process currentProcess;
+	
+	public IO(Queue ioQueue, Gui gui, Statistics statistics) {
+		this.ioQueue = ioQueue;
+		this.gui = gui;
+		this.statistics = statistics;
+	}
+}

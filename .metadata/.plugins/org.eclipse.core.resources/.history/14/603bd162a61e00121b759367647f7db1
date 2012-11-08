@@ -1,0 +1,28 @@
+public class IO {
+	private Queue ioQueue;
+	private Statistics statistics;
+	private Gui gui;
+	private Process currentProcess;
+	
+	public IO(Queue ioQueue, Gui gui, Statistics statistics) {
+		this.ioQueue = ioQueue;
+		this.gui = gui;
+		this.statistics = statistics;
+	}
+	
+	public void insertProcess(Process p) {
+		ioQueue.insert(p);
+	}
+	
+	public Process startProcess(long clock) {
+		assert currentProcess == null;
+		if (!ioQueue.isEmpty()) {
+    		currentProcess = (Process)ioQueue.removeNext();
+    		currentProcess.startIo(clock);
+    	} else {
+    		currentProcess = null;
+    	}
+    	gui.setCpuActive(currentProcess);
+    	return currentProcess;
+	}
+}

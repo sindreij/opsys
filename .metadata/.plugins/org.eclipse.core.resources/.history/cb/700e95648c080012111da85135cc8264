@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+
+/**
+ * This class implements a queue of customers as a circular buffer.
+ */
+public class CustomerQueue {
+	private Customer[] array;
+	private int length;
+	private int tail = 0; //The position where the next customer to push is
+	private int head = 0; //The position where the next customer should be pushed
+	private Gui gui;
+	/**
+	 * Creates a new customer queue.
+	 * @param queueLength	The maximum length of the queue.
+	 * @param gui			A reference to the GUI interface.
+	 */
+    public CustomerQueue(int queueLength, Gui gui) {
+    	array = new Customer[queueLength];
+    	this.length = queueLength;
+    	this.gui = gui;
+	}
+    
+    public synchronized void push(Customer customer) throws InterruptedException {
+    	int nexthead;
+    	if (head + 1 < length) {
+    		nexthead = head + 1;
+    	} else {
+    		nexthead = 0;
+    	}
+    	if (nexthead == tail) {
+    		gui.println("Doorman is waiting");
+    		wait();
+    		gui.println("Doorman is finished waiting");
+    	}
+    	array[head] = customer;
+    	head = nexthead
+    	gui.fillLoungeChair(head, customer);
+    }
+    
+    
+}
